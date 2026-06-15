@@ -26,7 +26,7 @@ func PlayerId(gameName, tagLine string) (string, error) {
 	
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
-		fmt.Println("error: " + err.Error())
+		panic("error: " + err.Error())
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -54,7 +54,7 @@ func PlayerId(gameName, tagLine string) (string, error) {
 }
 
 // Gets a list of the most recent match ID's associated with a player.
-func PlayerMatchIds(playerId string, start, count uint) ([]string, error) {
+func PlayerMatches(playerId string, start, count uint) ([]string, error) {
 	url, err := url.Parse(fmt.Sprintf(
 		"https://%s/lol/match/v5/matches/by-puuid/%s/ids?start=%d&count=%d", 
 		riotDomain, playerId, start, count,
@@ -71,7 +71,7 @@ func PlayerMatchIds(playerId string, start, count uint) ([]string, error) {
 	
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
-		fmt.Println("error: " + err.Error())
+		panic("error: " + err.Error())
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -111,7 +111,7 @@ func Timeline(matchId string) (map[string]any, error) {
 	
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
-		fmt.Println("error: " + err.Error())
+		panic("error: " + err.Error())
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -151,7 +151,7 @@ func MatchInfo(matchId string) (map[string]any, error) {
 	
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
-		fmt.Println("error: " + err.Error())
+		panic("error: " + err.Error())
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -171,4 +171,53 @@ func MatchInfo(matchId string) (map[string]any, error) {
 	}
 
 	return body, nil
+}
+
+// Gets the information about a player's current game.
+func OngoingMatch(playerId string) (map[string]any, error) {
+	url, err := url.Parse(fmt.Sprintf(
+		"https://%s/lol/spectator/v5/active-games/by-summoner/%s", 
+		riotDomain, playerId,
+	))
+	if err != nil {
+		panic(err)
+	}
+
+	req := http.Request{
+		Method: http.MethodGet,
+		URL: url,
+		Header: headerWithRiotToken(),
+	}
+	
+	resp, err := http.DefaultClient.Do(&req)
+	if err != nil {
+		panic("error: " + err.Error())
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, ErrMatchNotFound
+	}
+
+	jsonData, err := io.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		panic("error reading response body: " + err.Error())
+	}
+
+	body := make(map[string]any)
+	err = json.Unmarshal(jsonData, &body)
+	if err != nil {
+		panic("error parsing JSON from Riot: " + err.Error())
+	}
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+		return body, nil
+	case http.StatusNotFound:
+		return nil, ErrMatchNotFound
+	case http.StatusTooManyRequests:
+		return nil, ErrRateLimitExceeded
+	default:
+		return nil, ErrUnknown
+	}
 }
