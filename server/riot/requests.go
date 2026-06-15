@@ -11,7 +11,7 @@ import (
 // Gets a player's ID from their in-game name and tagline.
 func PlayerId(gameName, tagLine string) (string, error) {
 	url, err := url.Parse(fmt.Sprintf(
-		"https://%s/riot/account/v1/accounts/by-riot-id/%s/%s", 
+		"https://%s/riot/account/v1/accounts/by-riot-id/%s/%s",
 		riotDomain, gameName, tagLine,
 	))
 	if err != nil {
@@ -20,10 +20,10 @@ func PlayerId(gameName, tagLine string) (string, error) {
 
 	req := http.Request{
 		Method: http.MethodGet,
-		URL: url,
+		URL:    url,
 		Header: headerWithRiotToken(),
 	}
-	
+
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
 		panic("error: " + err.Error())
@@ -56,7 +56,7 @@ func PlayerId(gameName, tagLine string) (string, error) {
 // Gets a list of the most recent match ID's associated with a player.
 func PlayerMatches(playerId string, start, count uint) ([]string, error) {
 	url, err := url.Parse(fmt.Sprintf(
-		"https://%s/lol/match/v5/matches/by-puuid/%s/ids?start=%d&count=%d", 
+		"https://%s/lol/match/v5/matches/by-puuid/%s/ids?start=%d&count=%d",
 		riotDomain, playerId, start, count,
 	))
 	if err != nil {
@@ -65,10 +65,10 @@ func PlayerMatches(playerId string, start, count uint) ([]string, error) {
 
 	req := http.Request{
 		Method: http.MethodGet,
-		URL: url,
+		URL:    url,
 		Header: headerWithRiotToken(),
 	}
-	
+
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
 		panic("error: " + err.Error())
@@ -96,7 +96,7 @@ func PlayerMatches(playerId string, start, count uint) ([]string, error) {
 // Gets a full match timeline from a match ID.
 func Timeline(matchId string) (map[string]any, error) {
 	url, err := url.Parse(fmt.Sprintf(
-		"https://%s/lol/match/v5/matches/%s/timeline", 
+		"https://%s/lol/match/v5/matches/%s/timeline",
 		riotDomain, matchId,
 	))
 	if err != nil {
@@ -105,10 +105,10 @@ func Timeline(matchId string) (map[string]any, error) {
 
 	req := http.Request{
 		Method: http.MethodGet,
-		URL: url,
+		URL:    url,
 		Header: headerWithRiotToken(),
 	}
-	
+
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
 		panic("error: " + err.Error())
@@ -136,7 +136,7 @@ func Timeline(matchId string) (map[string]any, error) {
 // Gets the information about a match.
 func MatchInfo(matchId string) (map[string]any, error) {
 	url, err := url.Parse(fmt.Sprintf(
-		"https://%s/lol/match/v5/matches/%s", 
+		"https://%s/lol/match/v5/matches/%s",
 		riotDomain, matchId,
 	))
 	if err != nil {
@@ -145,10 +145,10 @@ func MatchInfo(matchId string) (map[string]any, error) {
 
 	req := http.Request{
 		Method: http.MethodGet,
-		URL: url,
+		URL:    url,
 		Header: headerWithRiotToken(),
 	}
-	
+
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
 		panic("error: " + err.Error())
@@ -176,7 +176,7 @@ func MatchInfo(matchId string) (map[string]any, error) {
 // Gets the information about a player's current game.
 func OngoingMatch(playerId string) (map[string]any, error) {
 	url, err := url.Parse(fmt.Sprintf(
-		"https://%s/lol/spectator/v5/active-games/by-summoner/%s", 
+		"https://%s/lol/spectator/v5/active-games/by-summoner/%s",
 		riotDomain, playerId,
 	))
 	if err != nil {
@@ -185,10 +185,10 @@ func OngoingMatch(playerId string) (map[string]any, error) {
 
 	req := http.Request{
 		Method: http.MethodGet,
-		URL: url,
+		URL:    url,
 		Header: headerWithRiotToken(),
 	}
-	
+
 	resp, err := http.DefaultClient.Do(&req)
 	if err != nil {
 		panic("error: " + err.Error())
