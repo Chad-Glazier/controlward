@@ -1,0 +1,27 @@
+openapi: "3.0.3"
+info:
+  title: Control Ward
+  version: "0.0.1"
+  description: |
+    [Placeholder]
+
+servers:
+  - url: http://localhost:3000/
+
+tags:
+  - name: Health
+    description: Service health and availability
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Ping the service
+      description: |
+        Simple health-check endpoint. Confirms that the service is running and has a database connection.
+      responses:
+        "200":
+          description: The service is functional.
+        "500":
+          description: The service failed to respond normally. Check the server logs.

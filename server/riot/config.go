@@ -6,7 +6,6 @@ import (
 )
 
 var riotToken = ""
-
 const riotDomain = "americas.api.riotgames.com"
 
 func init() {
