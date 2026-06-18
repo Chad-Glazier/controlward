@@ -1,10 +1,20 @@
+import { BrowserRouter, Route, Routes } from "react-router"
+import Home from "./pages/Home"
+import { PreferencesProvider } from "./hooks/usePreferences"
 
-function App() {
+export default function App() {
     return (
-        <>
-            <h1>Hello, Chungus.</h1>
-        </>
+        <PreferencesProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                </Routes>
+            </BrowserRouter> 
+        </PreferencesProvider>
     )
 }
 
-export default App
+
+
+
+
