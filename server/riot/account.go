@@ -36,7 +36,9 @@ func GetAccount(cfg *Config, gameName, tagLine string) (*Account, error) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		cfg.Logger.Error("failed to make request", "err", err.Error())
+		if cfg.Logger != nil {
+			cfg.Logger.Error("failed to make request", "err", err.Error())
+		}
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -53,7 +55,9 @@ func GetAccount(cfg *Config, gameName, tagLine string) (*Account, error) {
 		return account, nil
 	}
 
-	cfg.Logger.Error("riot: error response", "status", resp.Status)
+	if cfg.Logger != nil {
+		cfg.Logger.Error("riot: error response", "status", resp.Status)
+	}
 	return nil, riotError(resp)
 }
 
@@ -83,7 +87,9 @@ func GetAccountRegion(cfg *Config, puuid string) (*AccountRegion, error) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		cfg.Logger.Error("failed to make request", "err", err.Error())
+		if cfg.Logger != nil {
+			cfg.Logger.Error("failed to make request", "err", err.Error())
+		}
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -100,6 +106,8 @@ func GetAccountRegion(cfg *Config, puuid string) (*AccountRegion, error) {
 		return accountRegion, nil
 	}
 
-	cfg.Logger.Error("riot: error response", "status", resp.Status)
+	if cfg.Logger != nil {
+		cfg.Logger.Error("riot: error response", "status", resp.Status)
+	}
 	return nil, riotError(resp)
 }

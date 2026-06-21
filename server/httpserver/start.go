@@ -40,8 +40,8 @@ func Start() {
 	// Register global middleware.
 	//
 
-	handler := middleware.Cors(mux)
-	handler = middleware.Logger(handler)
+	h := middleware.Logger(mux)
+	h = middleware.Cors(h)
 
 	//
 	// Configure the server.
@@ -49,7 +49,7 @@ func Start() {
 
 	server := &http.Server{
 		Addr:    ":" + Port,
-		Handler: handler,
+		Handler: h,
 	}
 
 	slog.Info("starting server at http://" + Domain + ":" + Port)
