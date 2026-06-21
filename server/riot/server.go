@@ -1,10 +1,11 @@
 package riot
 
-// Represents a League of Legends game server. In the Riot API, this is called
-// a "region." However, the Riot API also refers to other things as regions 
-// too. To avoid confusion, this package calls a region like "na1" or "kr" a 
-// server--since it is, in fact, representing a game server--while the term
-// "region" is reserved for geographical regions like "americas" or "asia."
+// A Server represents a League of Legends game server. In the Riot API, this
+// is called a "region." However, the Riot API also refers to other things as
+// regions too. To avoid confusion, this package calls a region like "na1" or
+// "kr" a server--since it is, in fact, representing a game server--while the
+// term "region" is reserved for geographical regions like "americas" or
+// "asia."
 type Server string
 
 const (
@@ -23,4 +24,24 @@ const (
 	SG2  Server = "sg2"
 	TR1  Server = "tr1"
 	VN2  Server = "vn2"
+)
+
+// Most League of Legends endpoints in the Riot API are divided by the server,
+// but some more general endpoints (like accessing a Riot account) are based
+// on more general, geographic regions. Namely, "americas," "asia," and
+// "europe."
+type Region string
+
+const (
+	Americas Region = "americas"
+	Asia     Region = "asia"
+	Europe   Region = "europe"
+)
+
+// Represents a game for some API endpoints. Either "lol" or "tft".
+type Game string
+
+const (
+	LeagueOfLegends  Game = "lol"
+	TeamfightTactics Game = "tft"
 )

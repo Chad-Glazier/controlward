@@ -5,26 +5,10 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 )
 
-func accountGet(path string) (*http.Response, error) {
-	url, err := url.Parse("https://americas." + baseDomain + path)
-	if err != nil {
-		panic(err)
-	}
-
-	req := http.Request{}
-	req.Method = http.MethodGet
-	req.URL = url
-	req.Header = http.Header{}
-	req.Header.Add("X-Riot-Token", riotToken)
-
-	return http.DefaultClient.Do(&req)
-}
-
 // Represents a player account.
-type AccountDto struct {
+type Account struct {
 	// Player Universal Unique Identifier. Exact length of 78 characters.
 	// (Encrypted)
 	Puuid string `json:"puuid"`
@@ -41,14 +25,18 @@ type AccountDto struct {
 }
 
 // Gets the account details of a user based on their in-game name and tag line.
-func GetAccountDto(gameName, tagLine string) (*AccountDto, error) {
+func GetAccount(cfg *Config, gameName, tagLine string) (*Account, error) {
 
-	resp, err := accountGet(fmt.Sprintf(
+	req := &http.Request{}
+	setToken(cfg, req)
+	setRegionalUrl(cfg, req, fmt.Sprintf(
 		"/riot/account/v1/accounts/by-riot-id/%s/%s",
 		gameName, tagLine,
 	))
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		logger.Error("failed to make request", "err", err.Error())
+		cfg.Logger.Error("failed to make request", "err", err.Error())
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -58,27 +46,19 @@ func GetAccountDto(gameName, tagLine string) (*AccountDto, error) {
 		if err != nil {
 			return nil, err
 		}
-		account := AccountDto{}
-		if err := json.Unmarshal(body, &account); err != nil {
+		account := &Account{}
+		if err := json.Unmarshal(body, account); err != nil {
 			return nil, err
 		}
-		return &account, nil
+		return account, nil
 	}
 
-	logger.Error("riot: error response", "status", resp.Status)
+	cfg.Logger.Error("riot: error response", "status", resp.Status)
 	return nil, riotError(resp)
 }
 
-// Represents a game.
-type Game string
-
-const (
-	LeagueOfLegends  Game = "lol"
-	TeamfightTactics Game = "tft"
-)
-
 // Represents the active region of a player for a game they play.
-type AccountRegionDto struct {
+type AccountRegion struct {
 	// Player Universal Unique Identifier. Exact length of 78 characters.
 	// (Encrypted)
 	Puuid string `json:"puuid"`
@@ -92,14 +72,18 @@ type AccountRegionDto struct {
 // Gets the active region of a player for a game they play. It is currently
 // assumed that the game is always League of Legends, so this function only
 // takes a player UUID.
-func GetAccountRegionDto(puuid string) (*AccountRegionDto, error) {
+func GetAccountRegion(cfg *Config, puuid string) (*AccountRegion, error) {
 
-	resp, err := accountGet(fmt.Sprintf(
+	req := &http.Request{}
+	setToken(cfg, req)
+	setRegionalUrl(cfg, req, fmt.Sprintf(
 		"/riot/account/v1/region/by-game/%s/by-puuid/%s",
 		LeagueOfLegends, puuid,
 	))
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		logger.Error("failed to make request", "err", err.Error())
+		cfg.Logger.Error("failed to make request", "err", err.Error())
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -109,13 +93,13 @@ func GetAccountRegionDto(puuid string) (*AccountRegionDto, error) {
 		if err != nil {
 			return nil, err
 		}
-		accountRegion := AccountRegionDto{}
-		if err := json.Unmarshal(body, &accountRegion); err != nil {
+		accountRegion := &AccountRegion{}
+		if err := json.Unmarshal(body, accountRegion); err != nil {
 			return nil, err
 		}
-		return &accountRegion, nil
+		return accountRegion, nil
 	}
 
-	logger.Error("riot: error response", "status", resp.Status)
+	cfg.Logger.Error("riot: error response", "status", resp.Status)
 	return nil, riotError(resp)
 }

@@ -16,7 +16,7 @@ API documentation will be logged.`,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if !httpserver.ValidPort(httpserver.Port) {
 			return fmt.Errorf(
-				"--port argument %s is not a valid port number", 
+				"--port argument %s is not a valid port number",
 				httpserver.Port,
 			)
 		}
@@ -31,9 +31,9 @@ func init() {
 	rootCmd.AddCommand(serveCmd)
 
 	serveCmd.Flags().StringVarP(
-		&httpserver.Port, 
-		"port", "p", 
-		httpserver.Port, 
+		&httpserver.Port,
+		"port", "p",
+		httpserver.Port,
 		"set the port to listen on",
 	)
 }
