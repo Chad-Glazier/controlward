@@ -1,3 +1,7 @@
+/*
+This package implements a client for making calls to Riot APIs related to user
+accounts and League of Legends.
+*/
 package riot
 
 import (

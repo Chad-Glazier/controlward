@@ -32,9 +32,12 @@ func Start() {
 	//
 
 	mux := http.NewServeMux()
+
 	mux.HandleFunc("GET /openapi.yaml", handler.OpenAPISpec)
 	mux.HandleFunc("GET /", handler.DocsPage)
 	mux.HandleFunc("GET /health", handler.Health)
+
+	mux.HandleFunc("GET /history/{gameName}/{tagLine}", handler.GetHistory)
 
 	//
 	// Register global middleware.
