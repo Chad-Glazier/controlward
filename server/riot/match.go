@@ -13,24 +13,24 @@ import (
 type MatchType string
 
 const (
-	MatchRanked = "ranked"
-	MatchNormal = "normal"
-	MatchTourney = "tourney"
+	MatchRanked   = "ranked"
+	MatchNormal   = "normal"
+	MatchTourney  = "tourney"
 	MatchTutorial = "tutorial"
 )
 
 // Options for the Client.GetMatches function.
 type OptionsGetMatchIds struct {
 	StartTime uint64
-	EndTime uint64
+	EndTime   uint64
 	MatchType MatchType
 }
 
 func (c *Client) GetMatchIds(
-	puuid string, startIndex, count uint64, 
+	puuid string, startIndex, count uint64,
 	opt *OptionsGetMatchIds,
 ) ([]string, error) {
-	
+
 	req, err := c.RequestWithRegionalUrl(fmt.Sprintf(
 		"/lol/match/v5/matches/by-puuid/%s/ids",
 		puuid,
@@ -81,4 +81,3 @@ func (c *Client) GetMatchIds(
 	}
 	return nil, riotError(resp)
 }
-

@@ -11,8 +11,8 @@ func Health(w http.ResponseWriter, r *http.Request) {
 	err := riot.NewClient().Ping()
 	if err != nil {
 		http.Error(
-			w, 
-			"failed to connect to riot server", 
+			w,
+			"failed to connect to riot server",
 			http.StatusInternalServerError,
 		)
 	}

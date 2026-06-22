@@ -38,7 +38,7 @@ func init() {
 // The base domain name for the Riot API.
 const baseDomain = "api.riotgames.com"
 
-// Makes a request object (without sending it) that is configured with the 
+// Makes a request object (without sending it) that is configured with the
 // Riot token in its header and the base Riot API domain. Paths should include
 // a leading "/". The request method is "GET" by default.
 func (c *Client) Request(path string) (*http.Request, error) {
@@ -60,8 +60,8 @@ func (c *Client) Request(path string) (*http.Request, error) {
 	return req, nil
 }
 
-// Makes a request object (without sending it) that is configured with the 
-// Riot token in its header and the regional Riot API domain. Paths should 
+// Makes a request object (without sending it) that is configured with the
+// Riot token in its header and the regional Riot API domain. Paths should
 // include a leading "/". The request method is "GET" by default.
 func (c *Client) RequestWithRegionalUrl(path string) (*http.Request, error) {
 	url, err := url.Parse(fmt.Sprintf(
@@ -83,7 +83,7 @@ func (c *Client) RequestWithRegionalUrl(path string) (*http.Request, error) {
 	return req, nil
 }
 
-// Makes a request object (without sending it) that is configured with the 
+// Makes a request object (without sending it) that is configured with the
 // Riot token in its header and the game server-specific Riot API domain. Paths
 // should include a leading "/". The request method is "GET" by default.
 func (c *Client) RequestWithServerUrl(path string) (*http.Request, error) {
