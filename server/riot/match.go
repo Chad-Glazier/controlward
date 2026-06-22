@@ -281,7 +281,7 @@ type Objective struct {
 func (c *Client) GetMatch(matchId string) (*Match, error) {
 
 	if c.Cache.Matches != nil {
-		match, err := c.Cache.Matches.Get(matchId)
+		match, err := c.Cache.LoadMatch(matchId)
 		if err != nil {
 			c.Logger.Info("cache hit", "matchId", matchId)
 			return match, nil
