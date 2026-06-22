@@ -3,28 +3,28 @@ package riot
 import "testing"
 
 func TestGetAccountDto(t *testing.T) {
-	cfg := NewConfig()
+	client := NewClient()
 
-	_, err := GetAccount(cfg, "hello kittie irl", "NA1")
+	_, err := client.GetAccount("hello kittie irl", "NA1")
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestGetAccountRegion(t *testing.T) {
-	cfg := NewConfig()
+	client := NewClient()
 
-	account, err := GetAccount(cfg, "hello kittie irl", "NA1")
+	account, err := client.GetAccount("hello kittie irl", "NA1")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	acc, err := GetAccountRegion(cfg, account.Puuid)
+	acc, err := client.GetAccountRegion(account.Puuid)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if acc.Server != NA1 {
-		t.Fatalf("expected server %s, got %s", NA1, acc.Server)
+	if acc.Server != ServerNA1 {
+		t.Fatalf("expected server %s, got %s", ServerNA1, acc.Server)
 	}
 }

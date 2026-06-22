@@ -9,21 +9,21 @@ package riot
 type Server string
 
 const (
-	BR1  Server = "br1"
-	EUN1 Server = "eun1"
-	EUW1 Server = "euw1"
-	JP1  Server = "jp1"
-	KR   Server = "kr"
-	LA1  Server = "la1"
-	LA2  Server = "la2"
-	ME1  Server = "me1"
-	NA1  Server = "na1"
-	OC1  Server = "oc1"
-	PBE1 Server = "pbe1"
-	RU   Server = "ru"
-	SG2  Server = "sg2"
-	TR1  Server = "tr1"
-	VN2  Server = "vn2"
+	ServerBR1  Server = "br1"
+	ServerEUN1 Server = "eun1"
+	ServerEUW1 Server = "euw1"
+	ServerJP1  Server = "jp1"
+	ServerKR   Server = "kr"
+	ServerLA1  Server = "la1"
+	ServerLA2  Server = "la2"
+	ServerME1  Server = "me1"
+	ServerNA1  Server = "na1"
+	ServerOC1  Server = "oc1"
+	ServerPBE1 Server = "pbe1"
+	ServerRU   Server = "ru"
+	ServerSG2  Server = "sg2"
+	ServerTR1  Server = "tr1"
+	ServerVN2  Server = "vn2"
 )
 
 // Most League of Legends endpoints in the Riot API are divided by the server,
@@ -33,15 +33,15 @@ const (
 type Region string
 
 const (
-	Americas Region = "americas"
-	Asia     Region = "asia"
-	Europe   Region = "europe"
+	RegionAmericas Region = "americas"
+	RegionAsia     Region = "asia"
+	RegionEurope   Region = "europe"
 )
 
 // Represents a game for some API endpoints. Either "lol" or "tft".
 type Game string
 
 const (
-	LeagueOfLegends  Game = "lol"
-	TeamfightTactics Game = "tft"
+	GameLeagueOfLegends  Game = "lol"
+	GameTeamfightTactics Game = "tft"
 )

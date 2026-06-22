@@ -25,19 +25,20 @@ type Account struct {
 }
 
 // Gets the account details of a user based on their in-game name and tag line.
-func GetAccount(cfg *Config, gameName, tagLine string) (*Account, error) {
+func (c *Client) GetAccount(gameName, tagLine string) (*Account, error) {
 
-	req := &http.Request{}
-	setToken(cfg, req)
-	setRegionalUrl(cfg, req, fmt.Sprintf(
+	req, err := c.RequestWithRegionalUrl(fmt.Sprintf(
 		"/riot/account/v1/accounts/by-riot-id/%s/%s",
 		gameName, tagLine,
 	))
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		if cfg.Logger != nil {
-			cfg.Logger.Error("failed to make request", "err", err.Error())
+		if c.Logger != nil {
+			c.Logger.Error("failed to make request", "err", err.Error())
 		}
 		return nil, err
 	}
@@ -55,8 +56,8 @@ func GetAccount(cfg *Config, gameName, tagLine string) (*Account, error) {
 		return account, nil
 	}
 
-	if cfg.Logger != nil {
-		cfg.Logger.Error("riot: error response", "status", resp.Status)
+	if c.Logger != nil {
+		c.Logger.Error("riot: error response", "status", resp.Status)
 	}
 	return nil, riotError(resp)
 }
@@ -76,19 +77,20 @@ type AccountRegion struct {
 // Gets the active region of a player for a game they play. It is currently
 // assumed that the game is always League of Legends, so this function only
 // takes a player UUID.
-func GetAccountRegion(cfg *Config, puuid string) (*AccountRegion, error) {
+func (c *Client) GetAccountRegion(puuid string) (*AccountRegion, error) {
 
-	req := &http.Request{}
-	setToken(cfg, req)
-	setRegionalUrl(cfg, req, fmt.Sprintf(
+	req, err := c.RequestWithRegionalUrl(fmt.Sprintf(
 		"/riot/account/v1/region/by-game/%s/by-puuid/%s",
-		LeagueOfLegends, puuid,
+		GameLeagueOfLegends, puuid,
 	))
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		if cfg.Logger != nil {
-			cfg.Logger.Error("failed to make request", "err", err.Error())
+		if c.Logger != nil {
+			c.Logger.Error("failed to make request", "err", err.Error())
 		}
 		return nil, err
 	}
@@ -106,8 +108,8 @@ func GetAccountRegion(cfg *Config, puuid string) (*AccountRegion, error) {
 		return accountRegion, nil
 	}
 
-	if cfg.Logger != nil {
-		cfg.Logger.Error("riot: error response", "status", resp.Status)
+	if c.Logger != nil {
+		c.Logger.Error("riot: error response", "status", resp.Status)
 	}
 	return nil, riotError(resp)
 }
