@@ -276,7 +276,7 @@ type Objective struct {
 	Kills int  `json:"kills"`
 }
 
-// Retrieves highly detailed information about a match and the players 
+// Retrieves highly detailed information about a match and the players
 // involved.
 func (c *Client) GetMatch(matchId string) (*Match, error) {
 
