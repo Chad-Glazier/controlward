@@ -2,7 +2,7 @@ package riot
 
 import "testing"
 
-func TestGetAccountDto(t *testing.T) {
+func TestGetAccount(t *testing.T) {
 	client := NewClient()
 
 	_, err := client.GetAccount("hello kittie irl", "NA1")

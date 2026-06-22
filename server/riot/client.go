@@ -14,6 +14,7 @@ type Client struct {
 	Server Server
 	Token  string
 	Logger *slog.Logger
+	Cache  Cache
 }
 
 // Creates a client with the default configuration.

@@ -280,6 +280,14 @@ type Objective struct {
 // involved.
 func (c *Client) GetMatch(matchId string) (*Match, error) {
 
+	if c.Cache.Matches != nil {
+		match, err := c.Cache.Matches.Get(matchId)
+		if err != nil {
+			c.Logger.Info("cache hit", "matchId", matchId)
+			return match, nil
+		}
+	}
+
 	req, err := c.RequestWithRegionalUrl(fmt.Sprintf(
 		"/lol/match/v5/matches/%s",
 		matchId,
@@ -305,6 +313,9 @@ func (c *Client) GetMatch(matchId string) (*Match, error) {
 		match := &Match{}
 		if err := json.Unmarshal(body, match); err != nil {
 			return nil, err
+		}
+		if c.Cache.Matches != nil {
+			c.Cache.SaveMatch(matchId, match)
 		}
 		return match, nil
 	}
