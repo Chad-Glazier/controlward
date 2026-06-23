@@ -1,0 +1,41 @@
+.footer {
+    background-color: #111827;
+    border-top: 1px solid #1f2937;
+    color: #9ca3af;
+
+    padding: 16px 24px;
+}
+
+.content {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    font-size: 0.875rem;
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.contact a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+.contact a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .content {
+        flex-direction: column;
+        text-align: center;
+    }
+}

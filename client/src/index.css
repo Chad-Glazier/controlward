@@ -1,0 +1,17 @@
+:root {
+    font-family: "Roboto", sans-serif;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(90deg, #1b3164 0%, #2246a9 30%, #2246a9 70%, #1b3164 100%);
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+}

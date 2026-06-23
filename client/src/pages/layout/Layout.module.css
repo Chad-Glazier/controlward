@@ -1,0 +1,40 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1;
+}
+
+.scrollup {
+    position: fixed;
+    bottom: 100px;
+    right: 50px;
+
+
+    border-radius: 100%;
+    border: 1px solid #888;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #222;
+    font-size: 2rem;
+    padding: 12px;
+    
+    opacity: 1;
+    transition: 
+        background-color 400ms ease,
+        color 400ms ease,
+        opacity 400ms ease;
+}
+
+.scrollup:hover {
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+}
+
+.scrollup.hidden {
+    opacity: 0;
+    pointer-events: none;
+}

@@ -1,26 +1,10 @@
-import { usePreferences } from "../hooks/usePreferences"
-// import styles from "./Home.module.css"
+import Layout from "./layout/Layout"
+import styles from "./Home.module.css"
 
 function Home() {
-    const { preferences, updatePreference } = usePreferences()
-
-    return <>
-        <p>theme: {preferences.theme}</p>
-        <button
-            onClick={() => {
-                switch (preferences.theme) {
-                case "dark":
-                    updatePreference("theme", "light")
-                    break
-                case "light":
-                    updatePreference("theme", "dark")
-                    break
-                }
-            }}
-        >
-            toggle theme
-        </button>
-    </>
+    return <Layout>
+        <h1>hello</h1>
+    </Layout>
 }
 
 export default Home
