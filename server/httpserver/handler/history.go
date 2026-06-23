@@ -5,6 +5,8 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+	"strings"
+	"compress/gzip"
 
 	"github.com/Chad-Glazier/controlward/riot"
 )
@@ -68,6 +70,19 @@ func GetHistory(c *Config) http.HandlerFunc {
 		}
 
 		w.Header().Add("Content-Type", "application/json")
+
+		if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+			w.Header().Add("Content-Encoding", "gzip")
+
+			compressor := gzip.NewWriter(w)
+			defer compressor.Close()
+
+			encoder := json.NewEncoder(compressor)
+			encoder.Encode(matches)
+
+			return
+		}
+
 		encoder := json.NewEncoder(w)
 		encoder.Encode(matches)
 	}

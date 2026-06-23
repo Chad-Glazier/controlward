@@ -1,6 +1,7 @@
 package riot
 
 import (
+	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -295,6 +296,7 @@ func (c *Client) GetMatch(matchId string) (*Match, error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Accept-Encoding", "gzip")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -306,15 +308,23 @@ func (c *Client) GetMatch(matchId string) (*Match, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return nil, err
+		bodyReader := resp.Body
+		if resp.Header.Get("Content-Encoding") == "gzip" {
+			bodyReader, err = gzip.NewReader(resp.Body)
+			if err != nil {
+				bodyReader = resp.Body
+			} else {
+				defer bodyReader.Close()
+			}
 		}
+
 		match := &Match{}
-		if err := json.Unmarshal(body, match); err != nil {
+		decoder := json.NewDecoder(bodyReader)
+		if err := decoder.Decode(match); err != nil {
 			return nil, err
 		}
-		if c.Cache.Matches != nil {
+
+		if c.Cache.Matches != nil && match.Info.EndOfGameResult == "GameComplete" {
 			c.Cache.SaveMatch(matchId, match)
 		}
 		return match, nil
