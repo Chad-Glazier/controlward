@@ -13,7 +13,7 @@ function Layout({ children }: LayoutProps) {
 
     useEffect(() => {
         document.body.addEventListener("scroll", _ => {
-            if (document.body.scrollTop > 500) {
+            if (document.body.scrollHeight > 300) {
                 setShowScrollupButton(true)
             } else {
                 setShowScrollupButton(false)
@@ -23,13 +23,10 @@ function Layout({ children }: LayoutProps) {
 
     return <div className={styles.container}>
         <Header onSearch={async () => {}} />
-
         <main className={styles.main}>
             {children}
         </main>
-
         <ScrollupButton show={showScrollupButton} />
-
         <Footer />
     </div>
 }

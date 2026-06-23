@@ -8,6 +8,8 @@ import (
 
 	"github.com/Chad-Glazier/controlward/httpserver/handler"
 	"github.com/Chad-Glazier/controlward/httpserver/middleware"
+	"github.com/Chad-Glazier/controlward/riot"
+	"github.com/Chad-Glazier/controlward/store/memstore"
 )
 
 const Domain = "localhost"
@@ -28,6 +30,21 @@ func init() {
 func Start() {
 
 	//
+	// Set the configuration.
+	//
+
+	cache := riot.Cache{
+		Matches: memstore.NewMatchStore(2048),
+	}
+	riotClient := riot.NewClientWithCache(cache)
+	riotClient.Logger = slog.Default()
+
+	conf := &handler.Config{
+		Riot:   riot.NewClientWithCache(cache),
+		Logger: slog.Default(),
+	}
+
+	//
 	// Register the handlers.
 	//
 
@@ -35,9 +52,9 @@ func Start() {
 
 	mux.HandleFunc("GET /openapi.yaml", handler.OpenAPISpec)
 	mux.HandleFunc("GET /", handler.DocsPage)
-	mux.HandleFunc("GET /health", handler.Health)
+	mux.HandleFunc("GET /health", handler.Health(conf))
 
-	mux.HandleFunc("GET /history/{gameName}/{tagLine}", handler.GetHistory)
+	mux.HandleFunc("GET /history/{gameName}/{tagLine}", handler.GetHistory(conf))
 
 	//
 	// Register global middleware.

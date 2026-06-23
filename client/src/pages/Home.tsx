@@ -3,7 +3,7 @@ import styles from "./Home.module.css"
 
 function Home() {
     return <Layout>
-        <h1>hello</h1>
+
     </Layout>
 }
 

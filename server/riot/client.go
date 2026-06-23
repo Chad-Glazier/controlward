@@ -15,7 +15,6 @@ import (
 // A configuration for that helps define requests to the Riot API.
 type Client struct {
 	Region Region
-	Server Server
 	Token  string
 	Logger *slog.Logger
 	Cache  Cache
@@ -25,9 +24,8 @@ type Client struct {
 func NewClient() *Client {
 	return &Client{
 		Region: RegionAmericas,
-		Server: ServerNA1,
 		Token:  riotToken,
-		Logger: slog.New(slog.NewTextHandler(os.Stdout, nil)),
+		Logger: slog.Default(),
 	}
 }
 
@@ -38,9 +36,8 @@ func NewClient() *Client {
 func NewClientWithCache(cache Cache) *Client {
 	return &Client{
 		Region: RegionAmericas,
-		Server: ServerNA1,
 		Token:  riotToken,
-		Logger: slog.New(slog.NewTextHandler(os.Stdout, nil)),
+		Logger: slog.Default(),
 		Cache:  cache,
 	}
 }
@@ -105,10 +102,10 @@ func (c *Client) RequestWithRegionalUrl(path string) (*http.Request, error) {
 // Makes a request object (without sending it) that is configured with the
 // Riot token in its header and the game server-specific Riot API domain. Paths
 // should include a leading "/". The request method is "GET" by default.
-func (c *Client) RequestWithServerUrl(path string) (*http.Request, error) {
+func (c *Client) RequestWithServerUrl(server Server, path string) (*http.Request, error) {
 	url, err := url.Parse(fmt.Sprintf(
 		"https://%s.%s%s",
-		c.Server,
+		server,
 		baseDomain,
 		path,
 	))
@@ -127,8 +124,8 @@ func (c *Client) RequestWithServerUrl(path string) (*http.Request, error) {
 
 // Pings the Riot server to ensure that the connection is good and the token
 // is valid.
-func (c *Client) Ping() error {
-	req, err := c.RequestWithServerUrl("/lol/status/v4/platform-data")
+func (c *Client) Ping(server Server) error {
+	req, err := c.RequestWithServerUrl(server, "/lol/status/v4/platform-data")
 	if err != nil {
 		return err
 	}

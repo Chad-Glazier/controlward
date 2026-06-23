@@ -7,13 +7,15 @@ import (
 )
 
 // Writes a 200 response to indicate that the server is functioning.
-func Health(w http.ResponseWriter, r *http.Request) {
-	err := riot.NewClient().Ping()
-	if err != nil {
-		http.Error(
-			w,
-			"failed to connect to riot server",
-			http.StatusInternalServerError,
-		)
+func Health(c *Config) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := riot.NewClient().Ping(riot.ServerNA1)
+		if err != nil {
+			http.Error(
+				w,
+				"failed to connect to riot server",
+				http.StatusInternalServerError,
+			)
+		}
 	}
 }

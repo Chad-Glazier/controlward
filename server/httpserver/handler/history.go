@@ -7,75 +7,70 @@ import (
 	"strconv"
 
 	"github.com/Chad-Glazier/controlward/riot"
-	"github.com/Chad-Glazier/controlward/store/memstore"
 )
-
-var cache = riot.Cache{
-	Matches: memstore.NewMatchStore(1000),
-}
 
 // Gets a player's paginated match history. By default, only ranked games are
 // returned.
 //
 // The request must include "gameName" and "tagLine" path parameters.
-func GetHistory(w http.ResponseWriter, r *http.Request) {
+func GetHistory(c *Config) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	// Optional query parameters.
-	startIndex, count, err := parseStartCount(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	// Mandatory path parameters.
-	gameName := r.PathValue("gameName")
-	if err := riot.ValidateGameName(gameName); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	tagLine := r.PathValue("tagLine")
-	if err := riot.ValidateTagLine(tagLine); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	client := riot.NewClientWithCache(cache)
-
-	account, err := client.GetAccount(gameName, tagLine)
-	if err != nil {
-		switch err {
-		case riot.ErrNotFound:
-			http.Error(w, err.Error(), http.StatusNotFound)
-		default:
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		// Optional query parameters.
+		startIndex, count, err := parseStartCount(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
-		return
-	}
 
-	matchIds, err := client.GetMatchIds(
-		account.Puuid, startIndex, count,
-		&riot.OptionsGetMatchIds{
-			MatchType: riot.MatchRanked,
-		},
-	)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+		// Mandatory path parameters.
+		gameName := r.PathValue("gameName")
+		if err := riot.ValidateGameName(gameName); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		tagLine := r.PathValue("tagLine")
+		if err := riot.ValidateTagLine(tagLine); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 
-	matches := make([]riot.Match, count)
-	for i, matchId := range matchIds {
-		match, err := client.GetMatch(matchId)
+		account, err := c.Riot.GetAccount(gameName, tagLine)
+		if err != nil {
+			switch err {
+			case riot.ErrNotFound:
+				http.Error(w, err.Error(), http.StatusNotFound)
+			default:
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+			return
+		}
+
+		matchIds, err := c.Riot.GetMatchIds(
+			account.Puuid, startIndex, count,
+			&riot.OptionsGetMatchIds{
+				MatchType: riot.MatchRanked,
+			},
+		)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		matches[i] = *match
-	}
 
-	w.Header().Add("Content-Type", "application/json")
-	encoder := json.NewEncoder(w)
-	encoder.Encode(matches)
+		matches := make([]riot.Match, count)
+		for i, matchId := range matchIds {
+			match, err := c.Riot.GetMatch(matchId)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			matches[i] = *match
+		}
+
+		w.Header().Add("Content-Type", "application/json")
+		encoder := json.NewEncoder(w)
+		encoder.Encode(matches)
+	}
 }
 
 // Parses the "startIndex" and "count" query parameters. This will not return
