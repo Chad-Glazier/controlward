@@ -7,7 +7,12 @@ import (
 	"strconv"
 
 	"github.com/Chad-Glazier/controlward/riot"
+	"github.com/Chad-Glazier/controlward/store/memstore"
 )
+
+var cache = riot.Cache{
+	Matches: memstore.NewMatchStore(1000),
+}
 
 // Gets a player's paginated match history. By default, only ranked games are
 // returned.
@@ -34,7 +39,7 @@ func GetHistory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := riot.NewClient()
+	client := riot.NewClientWithCache(cache)
 
 	account, err := client.GetAccount(gameName, tagLine)
 	if err != nil {
@@ -48,7 +53,7 @@ func GetHistory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	matchIds, err := client.GetMatchIds(
-		account.Puuid, startIndex, count, 
+		account.Puuid, startIndex, count,
 		&riot.OptionsGetMatchIds{
 			MatchType: riot.MatchRanked,
 		},
@@ -76,7 +81,7 @@ func GetHistory(w http.ResponseWriter, r *http.Request) {
 // Parses the "startIndex" and "count" query parameters. This will not return
 // an error if the values are absent, instead it will return defaults. An error
 // will only be returned if one of the values are present but are not in the
-// correct format. The error message is suitable for sending in a plaintext 
+// correct format. The error message is suitable for sending in a plaintext
 // error response.
 func parseStartCount(r *http.Request) (uint64, uint64, error) {
 	var startIndex uint64 = 0

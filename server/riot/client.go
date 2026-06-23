@@ -31,6 +31,20 @@ func NewClient() *Client {
 	}
 }
 
+// Creates a new client with a cache. The cache is used to store certain
+// results from Riot that are cache-friendly (i.e., that don't need to be live)
+// in order to minimize latency and network load. The cache should be thread-
+// safe and declared in the global scope.
+func NewClientWithCache(cache Cache) *Client {
+	return &Client{
+		Region: RegionAmericas,
+		Server: ServerNA1,
+		Token:  riotToken,
+		Logger: slog.New(slog.NewTextHandler(os.Stdout, nil)),
+		Cache:  cache,
+	}
+}
+
 var riotToken string
 
 func init() {

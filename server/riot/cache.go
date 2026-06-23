@@ -3,7 +3,7 @@ package riot
 type MatchStore interface {
 	GetMatch(matchId string) (*Match, error)
 	SetMatch(matchId string, match *Match) error
-	DeleteMatch(matchId string, match *Match)
+	DeleteMatch(matchId string)
 }
 
 // Stores the configuration for a cache that stores data related to the Riot

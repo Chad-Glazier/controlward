@@ -27,7 +27,7 @@ const (
 )
 
 // Most League of Legends endpoints in the Riot API are divided by the server,
-// but some more endpoints (like accessing a Riot account) are based on more 
+// but some more endpoints (like accessing a Riot account) are based on more
 // general, geographic regions. Namely, "americas," "asia," and "europe."
 type Region string
 

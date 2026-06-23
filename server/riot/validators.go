@@ -11,7 +11,7 @@ import (
 func ValidateGameName(gameName string) error {
 
 	runeCount := utf8.RuneCountInString(gameName)
-	if runeCount > 16{
+	if runeCount > 16 {
 		return errors.New("gameName cannot have more than 16 runes")
 	}
 	if runeCount < 3 {
@@ -22,7 +22,7 @@ func ValidateGameName(gameName string) error {
 }
 
 // Returns nil if and only if the given tag line is valid. Otherwise, an error
-// is returned that describes the problem. The error is appropriate for a 
+// is returned that describes the problem. The error is appropriate for a
 // plaintext error response.
 func ValidateTagLine(tagLine string) error {
 
