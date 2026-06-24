@@ -9,15 +9,13 @@ import (
 	"strconv"
 )
 
-// Represents a match type. Either "ranked," "normal," "tourney," or
-// "tutorial."
-type MatchType string
+// Represents queue type. If you're wondering where the constants come from,
+// refer to https://static.developer.riotgames.com/docs/lol/queues.json
+type MatchType uint64
 
 const (
-	MatchRanked   = "ranked"
-	MatchNormal   = "normal"
-	MatchTourney  = "tourney"
-	MatchTutorial = "tutorial"
+	// 5v5 Ranked Solo games on Summoner's Rift.
+	MatchRankedSolo MatchType = 420
 )
 
 // Options for the Client.GetMatches function.
@@ -52,8 +50,8 @@ func (c *Client) GetMatchIds(
 		if opt.StartTime != 0 {
 			query.Add("startTime", strconv.FormatUint(opt.StartTime, 10))
 		}
-		if opt.MatchType != "" {
-			query.Add("type", string(opt.MatchType))
+		if opt.MatchType != 0 {
+			query.Add("queue", strconv.FormatUint(uint64(opt.MatchType), 10))
 		}
 	}
 	req.URL.RawQuery = query.Encode()

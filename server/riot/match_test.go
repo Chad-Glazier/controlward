@@ -30,7 +30,7 @@ func TestGetMatch(t *testing.T) {
 	}
 
 	matchIds, err := c.GetMatchIds(account.Puuid, 0, 4, &OptionsGetMatchIds{
-		MatchType: MatchRanked,
+		MatchType: MatchRankedSolo,
 	})
 	if err != nil {
 		t.Fatal(err)
