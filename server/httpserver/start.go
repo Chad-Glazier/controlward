@@ -33,9 +33,7 @@ func Start() {
 	// Set the configuration.
 	//
 
-	cache := riot.Cache{
-		Matches: memstore.NewMatchStore(2048),
-	}
+	cache := riot.NewCache(memstore.NewMatchStore(2048))
 	riotClient := riot.NewClientWithCache(cache)
 	riotClient.Logger = slog.Default()
 

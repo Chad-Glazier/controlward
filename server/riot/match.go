@@ -281,12 +281,10 @@ type Objective struct {
 // involved.
 func (c *Client) GetMatch(matchId string) (*Match, error) {
 
-	if c.Cache.Matches != nil {
-		match, _ := c.Cache.LoadMatch(matchId)
-		if match != nil {
-			c.Logger.Info("cache hit", "matchId", matchId)
-			return match, nil
-		}
+	match, _ := c.Cache.LoadMatch(matchId)
+	if match != nil {
+		c.Logger.Info("cache hit", "matchId", matchId)
+		return match, nil
 	}
 
 	req, err := c.RequestWithRegionalUrl(fmt.Sprintf(
@@ -296,7 +294,7 @@ func (c *Client) GetMatch(matchId string) (*Match, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Accept-Encoding", "gzip")
+	req.Header.Add("Accept-Encoding", "gzip")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -308,25 +306,13 @@ func (c *Client) GetMatch(matchId string) (*Match, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		bodyReader := resp.Body
-		if resp.Header.Get("Content-Encoding") == "gzip" {
-			bodyReader, err = gzip.NewReader(resp.Body)
-			if err != nil {
-				bodyReader = resp.Body
-			} else {
-				defer bodyReader.Close()
-			}
-		}
 
 		match := &Match{}
-		decoder := json.NewDecoder(bodyReader)
-		if err := decoder.Decode(match); err != nil {
+		if err := decodeBody(match, resp); err != nil {
 			return nil, err
 		}
 
-		if c.Cache.Matches != nil && match.Info.EndOfGameResult == "GameComplete" {
-			c.Cache.SaveMatch(matchId, match)
-		}
+		c.Cache.SaveMatch(matchId, match)
 		return match, nil
 	}
 
@@ -335,3 +321,31 @@ func (c *Client) GetMatch(matchId string) (*Match, error) {
 	}
 	return nil, riotError(resp)
 }
+
+// Decodes a response body as JSON. If the "Content-Encoding" header indicates
+// that it's compressed in a format we recognize, then the body will be
+// decompressed accordingly. At the time of writing, the recognized encodings
+// are: gzip, x-gzip.
+//
+// Note: The response body will not be closed by this function, even though it
+// will be fully read.
+func decodeBody(dst any, resp *http.Response) error {
+
+	var body io.Reader
+
+	switch resp.Header.Get("Content-Encoding") {
+	case "gzip", "x-gzip":
+		r, err := gzip.NewReader(resp.Body)
+		if err != nil {
+			return err
+		}
+		defer r.Close()
+		body = r
+	default:
+		body = resp.Body
+	}
+
+	decoder := json.NewDecoder(body)
+	return decoder.Decode(dst)
+}
+
