@@ -1,21 +1,11 @@
 package riot
 
 import (
-	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"strconv"
-)
-
-// Represents queue type. If you're wondering where the constants come from,
-// refer to https://static.developer.riotgames.com/docs/lol/queues.json
-type MatchType uint64
-
-const (
-	// 5v5 Ranked Solo games on Summoner's Rift.
-	MatchRankedSolo MatchType = 420
 )
 
 // Options for the Client.GetMatches function.
@@ -83,6 +73,58 @@ func (c *Client) GetMatchIds(
 	return nil, riotError(resp)
 }
 
+// Retrieves highly detailed information about a match and the players
+// involved.
+func (c *Client) GetMatch(matchId string) (*Match, error) {
+
+	match, _ := c.Cache.LoadMatch(matchId)
+	if match != nil {
+		c.Logger.Info("cache hit", "matchId", matchId)
+		return match, nil
+	}
+
+	req, err := c.RequestWithRegionalUrl(fmt.Sprintf(
+		"/lol/match/v5/matches/%s",
+		matchId,
+	))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Accept-Encoding", "gzip")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		if c.Logger != nil {
+			c.Logger.Error("failed to make request", "err", err.Error())
+		}
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+
+		match := &Match{}
+		if err := decodeBody(match, resp); err != nil {
+			return nil, err
+		}
+
+		c.Cache.SaveMatch(matchId, match)
+		return match, nil
+	}
+
+	if c.Logger != nil {
+		c.Logger.Error("riot: error response", "status", resp.Status)
+	}
+	return nil, riotError(resp)
+}
+
+//
+// Data Transfer Objects
+//
+// These types define the shape of JSON data related to matches that will be
+// received from the Riot API.
+//
+
 // Represents a League of Legends match.
 type Match struct {
 	Metadata Metadata `json:"metadata"`
@@ -99,10 +141,10 @@ type Metadata struct {
 type Info struct {
 	EndOfGameResult string `json:"endOfGameResult,omitempty"`
 
-	GameCreation       int64 `json:"gameCreation"`
-	GameDuration       int64 `json:"gameDuration"`
-	GameEndTimestamp   int64 `json:"gameEndTimestamp,omitempty"`
-	GameStartTimestamp int64 `json:"gameStartTimestamp,omitempty"`
+	GameCreation       int64 `json:"gameCreation"`                 // UNIX timestamp
+	GameDuration       int64 `json:"gameDuration"`                 // milliseconds
+	GameEndTimestamp   int64 `json:"gameEndTimestamp,omitempty"`   // UNIX timestamp
+	GameStartTimestamp int64 `json:"gameStartTimestamp,omitempty"` // UNIX timestamp
 
 	GameID      int64  `json:"gameId"`
 	GameMode    string `json:"gameMode"`
@@ -274,76 +316,3 @@ type Objective struct {
 	First bool `json:"first"`
 	Kills int  `json:"kills"`
 }
-
-// Retrieves highly detailed information about a match and the players
-// involved.
-func (c *Client) GetMatch(matchId string) (*Match, error) {
-
-	match, _ := c.Cache.LoadMatch(matchId)
-	if match != nil {
-		c.Logger.Info("cache hit", "matchId", matchId)
-		return match, nil
-	}
-
-	req, err := c.RequestWithRegionalUrl(fmt.Sprintf(
-		"/lol/match/v5/matches/%s",
-		matchId,
-	))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Add("Accept-Encoding", "gzip")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		if c.Logger != nil {
-			c.Logger.Error("failed to make request", "err", err.Error())
-		}
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode == http.StatusOK {
-
-		match := &Match{}
-		if err := decodeBody(match, resp); err != nil {
-			return nil, err
-		}
-
-		c.Cache.SaveMatch(matchId, match)
-		return match, nil
-	}
-
-	if c.Logger != nil {
-		c.Logger.Error("riot: error response", "status", resp.Status)
-	}
-	return nil, riotError(resp)
-}
-
-// Decodes a response body as JSON. If the "Content-Encoding" header indicates
-// that it's compressed in a format we recognize, then the body will be
-// decompressed accordingly. At the time of writing, the recognized encodings
-// are: gzip, x-gzip.
-//
-// Note: The response body will not be closed by this function, even though it
-// will be fully read.
-func decodeBody(dst any, resp *http.Response) error {
-
-	var body io.Reader
-
-	switch resp.Header.Get("Content-Encoding") {
-	case "gzip", "x-gzip":
-		r, err := gzip.NewReader(resp.Body)
-		if err != nil {
-			return err
-		}
-		defer r.Close()
-		body = r
-	default:
-		body = resp.Body
-	}
-
-	decoder := json.NewDecoder(body)
-	return decoder.Decode(dst)
-}
-

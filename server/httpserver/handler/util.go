@@ -45,9 +45,9 @@ func parseStartCount(r *http.Request) (uint64, uint64, error) {
 }
 
 // If the request header indicates that it can handle compressed data in one
-// of the formats we recognize, then we will send the data as JSON in that 
-// compressed format. As a fallback, the uncompressed JSON will be sent.
-func sendCompressedJson(w http.ResponseWriter, r *http.Request, data any) {
+// of the formats we recognize, then we will send the data as JSON in that
+// format. As a fallback, the uncompressed JSON will be sent.
+func sendCompressedJson(w http.ResponseWriter, r *http.Request, data any) error {
 	w.Header().Add("Content-Type", "application/json")
 
 	if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
@@ -57,19 +57,17 @@ func sendCompressedJson(w http.ResponseWriter, r *http.Request, data any) {
 		defer compressor.Close()
 
 		encoder := json.NewEncoder(compressor)
-		encoder.Encode(data)
-
-		return
+		return encoder.Encode(data)
 	}
 
 	encoder := json.NewEncoder(w)
-	encoder.Encode(data)
+	return encoder.Encode(data)
 }
 
 // Sends uncompressed JSON in the response.
-func sendJson(w http.ResponseWriter, r *http.Request, data any) {
+func sendJson(w http.ResponseWriter, r *http.Request, data any) error {
 	w.Header().Add("Content-Type", "application/json")
 
 	encoder := json.NewEncoder(w)
-	encoder.Encode(data)
+	return encoder.Encode(data)
 }

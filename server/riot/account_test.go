@@ -5,10 +5,12 @@ import "testing"
 func TestGetAccount(t *testing.T) {
 	client := NewClient()
 
-	_, err := client.GetAccount("hello kittie irl", "NA1")
+	account, err := client.GetAccount("hello kittie irl", "NA1")
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	t.Log("PUUID: " + account.Puuid)
 }
 
 func TestGetAccountRegion(t *testing.T) {

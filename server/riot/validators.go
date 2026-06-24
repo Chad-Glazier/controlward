@@ -5,6 +5,11 @@ import (
 	"unicode/utf8"
 )
 
+//
+// This file defines some simple validator functions for values that might be
+// sent to/from the Riot API.
+//
+
 // Returns nil if and only if the given game name is valid. Otherwise, an
 // error is returned that describes the problem. The error is appropriate for
 // a plaintext error response.

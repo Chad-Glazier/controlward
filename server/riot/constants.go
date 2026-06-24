@@ -1,5 +1,22 @@
 package riot
 
+//
+// This file contains the constants that are dictated by the Riot API. Many
+// endpoints return integer IDs or have specific server names that are worth
+// aliasing as constants.
+//
+// At the time of writing, these constants are documented at:
+// https://developer.riotgames.com/docs/lol#working-with-lol-apis_game-constants
+//
+
+// Represents queue type.
+type MatchType uint64
+
+const (
+	// 5v5 Ranked Solo games on Summoner's Rift.
+	MatchRankedSolo MatchType = 420
+)
+
 // A Server represents a League of Legends game server. In the Riot API, this
 // is called a "region." However, the Riot API also refers to other things as
 // regions too. To avoid confusion, this package calls a region like "na1" or

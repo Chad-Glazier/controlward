@@ -26,9 +26,8 @@ func TestMatchStore(t *testing.T) {
 
 	for i := range s.Capacity * 3 {
 		s.SetMatch(fmt.Sprintf("%d", i), &riot.Match{})
-	}
-
-	if len(s.matches) != int(s.Capacity) {
-		t.Fatalf("expected %d matches, got %d", s.Capacity, len(s.matches))
+		if len(s.matches) != int(s.Capacity) {
+			t.Fatalf("expected %d matches, got %d", s.Capacity, len(s.matches))
+		}
 	}
 }

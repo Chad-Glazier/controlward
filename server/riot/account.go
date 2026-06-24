@@ -7,23 +7,6 @@ import (
 	"net/http"
 )
 
-// Represents a player account.
-type Account struct {
-	// Player Universal Unique Identifier. Exact length of 78 characters.
-	// (Encrypted)
-	Puuid string `json:"puuid"`
-	// In-game display name for the account.
-	//
-	// This field may be excluded from the response if the account doesn't have
-	// a gameName.
-	GameName string `json:"gameName"`
-	// In-game tag line for the user account.
-	//
-	// This field may be excluded from the response if the account doesn't have
-	// a tagLine.
-	TagLine string `json:"tagLine"`
-}
-
 // Gets the account details of a user based on their in-game name and tag line.
 func (c *Client) GetAccount(gameName, tagLine string) (*Account, error) {
 
@@ -60,18 +43,6 @@ func (c *Client) GetAccount(gameName, tagLine string) (*Account, error) {
 		c.Logger.Error("riot: error response", "status", resp.Status)
 	}
 	return nil, riotError(resp)
-}
-
-// Represents the active region of a player for a game they play.
-type AccountRegion struct {
-	// Player Universal Unique Identifier. Exact length of 78 characters.
-	// (Encrypted)
-	Puuid string `json:"puuid"`
-	// Game to lookup active region. Either "tft" (Teamfight Tactics) or "lol"
-	// (League of Legends).
-	Game Game `json:"game"`
-	// Player active region. For example, na1 or euw1.
-	Server Server `json:"region"`
 }
 
 // Gets the active region of a player for a game they play. It is currently
@@ -112,4 +83,40 @@ func (c *Client) GetAccountRegion(puuid string) (*AccountRegion, error) {
 		c.Logger.Error("riot: error response", "status", resp.Status)
 	}
 	return nil, riotError(resp)
+}
+
+//
+// Data Transfer Objects
+//
+// These types define the shape of JSON data related to accounts that will be
+// received from the Riot API.
+//
+
+// Represents a player account.
+type Account struct {
+	// Player Universal Unique Identifier. Exact length of 78 characters.
+	// (Encrypted)
+	Puuid string `json:"puuid"`
+	// In-game display name for the account.
+	//
+	// This field may be excluded from the response if the account doesn't have
+	// a gameName.
+	GameName string `json:"gameName"`
+	// In-game tag line for the user account.
+	//
+	// This field may be excluded from the response if the account doesn't have
+	// a tagLine.
+	TagLine string `json:"tagLine"`
+}
+
+// Represents the active region of a player for a game they play.
+type AccountRegion struct {
+	// Player Universal Unique Identifier. Exact length of 78 characters.
+	// (Encrypted)
+	Puuid string `json:"puuid"`
+	// Game to lookup active region. Either "tft" (Teamfight Tactics) or "lol"
+	// (League of Legends).
+	Game Game `json:"game"`
+	// Player active region. For example, na1 or euw1.
+	Server Server `json:"region"`
 }

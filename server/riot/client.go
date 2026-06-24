@@ -1,6 +1,16 @@
 /*
 This package implements a client for making calls to Riot APIs related to user
-accounts and League of Legends.
+accounts and League of Legends. You can make a new client with NewClient, or if
+you've implemented a cache, NewClientWithCache. The client is very
+straightforward; each method calls a single endpoint on the Riot API. This
+makes it a little less convenient to use, but also makes it easy to minimize
+external calls. It is also strongly recommended that, for "real" projects, you
+go through the work of implementing the Cache interface. The cache is designed
+to only store data that is large and will not be changed. For example, matches
+are always cached by their ID because a match cannot change after it's ended.
+Considering the size of a match and how often you'll want to retrieve them,
+this saves a lot of network load and API calls with no risk of having outdated
+information.
 */
 package riot
 
@@ -11,6 +21,12 @@ import (
 	"net/url"
 	"os"
 )
+
+//
+// This file implements a Client type, which is used as the object on which
+// requests are made. The purpose of having a client struct is to just store
+// some repeated configuration between requests.
+//
 
 // A configuration for that helps define requests to the Riot API.
 type Client struct {

@@ -12,8 +12,8 @@ function Layout({ children }: LayoutProps) {
     const [showScrollupButton, setShowScrollupButton] = useState(false)
 
     useEffect(() => {
-        document.body.addEventListener("scroll", _ => {
-            if (document.body.scrollHeight > 300) {
+        window.addEventListener("scroll", _ => {
+            if (window.scrollY > 300) {
                 setShowScrollupButton(true)
             } else {
                 setShowScrollupButton(false)
@@ -32,13 +32,14 @@ function Layout({ children }: LayoutProps) {
 }
 
 function ScrollupButton({ show }: { show: boolean }) {
-    return <a href="#header">
-        <button 
-            className={styles.scrollup + " " + (show ? "" : styles.hidden)}
-        >
-            <FontAwesomeIcon icon={faArrowUp} />
-        </button>  
-    </a>
+    return <button 
+        className={styles.scrollup + " " + (show ? "" : styles.hidden)}
+        onClick={() => {
+            window.scrollTo(0, 0)
+        }}
+    >
+        <FontAwesomeIcon icon={faArrowUp} />
+    </button>  
 }
 
 export default Layout
