@@ -5,9 +5,11 @@ import Footer from "./Footer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons"
 
-type LayoutProps = PropsWithChildren<{}>
+type LayoutProps = PropsWithChildren<{
+    hideHeader?: boolean
+}>
 
-function Layout({ children }: LayoutProps) {
+function Layout({ children, hideHeader }: LayoutProps) {
 
     const [showScrollupButton, setShowScrollupButton] = useState(false)
 
@@ -22,7 +24,7 @@ function Layout({ children }: LayoutProps) {
     }, [])
 
     return <div className={styles.container}>
-        <Header onSearch={async () => {}} />
+        <Header hidden={hideHeader} />
         <main className={styles.main}>
             {children}
         </main>

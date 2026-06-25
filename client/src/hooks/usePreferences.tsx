@@ -3,11 +3,15 @@ import { createContext, useContext, useEffect, useState } from "react"
 type Preferences = {
     theme: "light" | "dark"
     region: "americas"
+    recentProfiles: { 
+        gameName: string, tagLine: string, puuid: string 
+    }[]
 }
 
 const PREFERENCES_DEFAULT: Preferences = {
     theme: "dark",
-    region: "americas"
+    region: "americas",
+    recentProfiles: []
 }
 
 type PreferencesContextType = {

@@ -1,0 +1,88 @@
+.container {
+    position: relative;
+    width: min(100%, 600px);
+}
+
+.search {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 4px 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    background-color: #aaa;
+    transition: background-color 300ms ease;
+}
+
+.search:has(.input:focus) {
+    background-color: #eee;
+}
+
+.icon {
+    color: #555;
+    transform: translateY(1px);
+}
+
+.search:has(.input:focus) .icon {
+    color: #444;
+}
+
+.error {
+    z-index: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    transform: translateY(2px);
+    background-color: cyan;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 0.8em;
+    color: white;
+
+    transition: all 300ms ease;
+}
+
+.error.focused {
+    background-color: cyan;
+}
+
+.error.invalid {
+    background-color: red;
+}
+
+.error.valid {
+    background-color: cyan;
+}
+
+.error.show {
+    padding: 2px;
+    height: fit-content;
+    transform: translateY(100%);
+}
+
+.error.blurred {
+    background-color: gray;
+}
+
+.input {
+    flex: 1;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 3px;
+}
+
+.input:focus {
+    border: none;
+    outline: none;
+}

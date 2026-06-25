@@ -16,6 +16,12 @@
     background-color: #111827;
     border-top: 1px solid #1f2937;
     color: #eee;
+
+    transition: transform 400ms ease;
+}
+
+.header.hidden {
+    transform: translateY(-100%);
 }
 
 .brand {

@@ -1,12 +1,17 @@
 .container {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding-top: 72px;
+
+    background-image: url("../../assets/lucian_splash_hd.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .main {
     flex: 1;
+
+    min-height: 100vh;
 }
 
 .scrollup {

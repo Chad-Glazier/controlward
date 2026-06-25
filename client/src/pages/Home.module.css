@@ -1,0 +1,94 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100vh;
+
+    backdrop-filter: contrast(80%);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.header {
+    border-right: 4px solid rgba(255, 255, 255, 0.5);
+    padding-right: 2rem;
+
+	text-wrap: wrap;
+    text-align: right;
+
+	font-size: 12rem;
+
+	font-family: "Space Grotesk", sans-serif;
+
+	color: rgba(255, 255, 255, 0.5);
+
+	background: linear-gradient(90deg,
+		rgba(0, 0, 0, 0), red, rgba(0, 0, 0, 0));
+	background-repeat: no-repeat;
+	background-size: 60%;
+	animation: wave 6s linear infinite;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes wave {
+	0% {
+		background-position: -300%;
+	}
+	100% {
+		background-position: 300%;
+	}
+}
+
+.searchSection {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-top: 100px;
+	width: min(500px, calc(100% - 20px));
+	gap: 40px;
+	min-height: 400px;
+	max-height: min(60vh, 600px);
+}
+
+.subtitle {
+	display: none;
+    color: #aaa;
+}
+
+.recentSearches {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.recentSearches h2 {
+	color: gray;
+	font-style: italic;
+	font-weight: normal;
+	font-size: 1rem;
+}
+
+
+@media (orientation: portrait) {
+	.container {
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.searchSection {
+		padding-top: 0;
+	}
+
+	.header {
+		font-size: 4rem;
+	}
+}

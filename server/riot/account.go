@@ -85,6 +85,11 @@ func (c *Client) GetAccountRegion(puuid string) (*AccountRegion, error) {
 	return nil, riotError(resp)
 }
 
+// TODO: Get rank
+// https://developer.riotgames.com/apis#league-v4/GET_getLeagueEntriesByPUUID
+
+
+
 //
 // Data Transfer Objects
 //
