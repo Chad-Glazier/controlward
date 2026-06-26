@@ -85,10 +85,45 @@ func (c *Client) GetAccountRegion(puuid string) (*AccountRegion, error) {
 	return nil, riotError(resp)
 }
 
-// TODO: Get rank
-// https://developer.riotgames.com/apis#league-v4/GET_getLeagueEntriesByPUUID
+// Gets the ranked information for a user on the given server. The user
+func (c *Client) GetLeagueEntries(
+	server Server, puuid string,
+) ([]LeagueEntry, error) {
 
+	req, err := c.RequestWithServerUrl(
+		server, 
+		"/lol/league/v4/entries/by-puuid/" + puuid,
+	)
+	if err != nil {
+		return nil, err
+	}
 
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		if c.Logger != nil {
+			c.Logger.Error("failed to make request", "err", err.Error())
+		}
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		leagueEntries := []LeagueEntry{}
+		if err := json.Unmarshal(body, &leagueEntries); err != nil {
+			return nil, err
+		}
+		return leagueEntries, nil
+	}
+
+	if c.Logger != nil {
+		c.Logger.Error("riot: error response", "status", resp.Status)
+	}
+	return nil, riotError(resp)
+}
 
 //
 // Data Transfer Objects
@@ -124,4 +159,20 @@ type AccountRegion struct {
 	Game Game `json:"game"`
 	// Player active region. For example, na1 or euw1.
 	Server Server `json:"region"`
+}
+
+// Represents a player's ranked information in League of Legends.
+type LeagueEntry struct {
+	QueueType    QueueType `json:"queueType"`
+	Tier         string    `json:"tier"`
+	Rank         string    `json:"rank"`
+	Puuid        string    `json:"puuid"`
+	LeaguePoints int       `json:"leaguePoints"`
+	Wins         int       `json:"wins"`
+	Losses       int       `json:"losses"`
+
+	Veteran    bool `json:"veteran"`
+	Inactive   bool `json:"inactive"`
+	FreshBlood bool `json:"freshBlood"`
+	HotStreak  bool `json:"hotStreak"`
 }

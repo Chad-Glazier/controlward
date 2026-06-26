@@ -61,3 +61,13 @@ const (
 	GameLeagueOfLegends  Game = "lol"
 	GameTeamfightTactics Game = "tft"
 )
+
+// Since there are multiple competitive League queues, League endpoints will
+// have "queueType" values to distinguish them. This type enumerates them.
+type QueueType string
+
+const (
+	QueueRankedSolo QueueType = "RANKED_SOLO_5x5"
+	QueueRankedTeam QueueType = "RANKED_TEAM_5x5" // AKA Ranked Flex
+)
+

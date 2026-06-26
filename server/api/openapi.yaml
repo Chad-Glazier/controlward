@@ -83,6 +83,67 @@ paths:
             text/plain:
               schema:
                 type: string
+  /rank/{server}/{puuid}:
+    get:
+      summary: Get player's solo queue rank
+      description: >
+        Returns the player's Ranked Solo/Duo information for the specified
+        League of Legends server. If the player is unranked in Solo Queue,
+        a 404 response is returned.
+      operationId: getRank
+      tags:
+        - Ranked
+
+      parameters:
+        - name: server
+          in: path
+          required: true
+          description: League of Legends server (e.g. `na1`, `euw1`, `kr`).
+          schema:
+            type: string
+
+        - name: puuid
+          in: path
+          required: true
+          description: Riot PUUID.
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Ranked information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rank"
+
+        "400":
+          description: Invalid server or PUUID.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+        "404":
+          description: Player not found or has no Ranked Solo/Duo entry.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+        "429":
+          description: Riot API rate limit exceeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+        "500":
+          description: Internal server error.
+          content:
+            text/plain:
+              schema:
+                type: string
 
 components:
   schemas:
@@ -110,4 +171,41 @@ components:
         server:
           type: string
           description: The server/region the account belongs to.
-          example: kr1
+          example: kr
+          
+    Rank:
+      type: object
+      required:
+        - tier
+        - rank
+        - puuid
+        - leaguePoints
+        - wins
+        - losses
+      properties:
+        tier:
+          type: string
+          description: Ranked tier.
+          example: DIAMOND
+
+        rank:
+          type: string
+          description: Division within the tier.
+          example: II
+
+        puuid:
+          type: string
+          description: Riot's globally unique player identifier.
+          example: cQh4lD1Q7vK1L3o4...
+
+        leaguePoints:
+          type: integer
+          example: 75
+
+        wins:
+          type: integer
+          example: 142
+
+        losses:
+          type: integer
+          example: 118

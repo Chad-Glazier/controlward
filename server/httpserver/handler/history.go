@@ -9,7 +9,7 @@ import (
 // Gets a player's paginated match history. By default, only ranked solo games
 // are returned.
 //
-// The request must include "gameName" and "tagLine" path parameters.
+// The request must include a "puuid" path parameter.
 func GetHistory(c *Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -21,36 +21,27 @@ func GetHistory(c *Config) http.HandlerFunc {
 		}
 
 		// Mandatory path parameters.
-		gameName := r.PathValue("gameName")
-		if err := riot.ValidateGameName(gameName); err != nil {
+		puuid := r.PathValue("puuid")
+		if err := riot.ValidatePuuid(puuid); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		tagLine := r.PathValue("tagLine")
-		if err := riot.ValidateTagLine(tagLine); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		account, err := c.Riot.GetAccount(gameName, tagLine)
-		if err != nil {
-			switch err {
-			case riot.ErrNotFound:
-				http.Error(w, err.Error(), http.StatusNotFound)
-			default:
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
 			return
 		}
 
 		matchIds, err := c.Riot.GetMatchIds(
-			account.Puuid, startIndex, count,
+			puuid, startIndex, count,
 			&riot.OptionsGetMatchIds{
 				MatchType: riot.MatchRankedSolo,
 			},
 		)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			switch err {
+			case riot.ErrNotFound:
+				http.Error(w, err.Error(), http.StatusNotFound)
+			case riot.ErrRateLimit:
+				http.Error(w, err.Error(), http.StatusTooManyRequests)
+			default:
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 			return
 		}
 
