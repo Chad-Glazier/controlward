@@ -39,7 +39,7 @@
     left: 0;
 
     width: 100%;
-    transform: translateY(2px);
+    transform: translateY(3px);
     background-color: cyan;
 
     display: flex;
