@@ -11,6 +11,10 @@ servers:
 tags:
   - name: Health
     description: Service health and availability
+  - name: Rank
+    description: Player ranked information
+  - name: Account
+    description: Player account information
 
 paths:
   /health:
@@ -27,7 +31,7 @@ paths:
           description: The service failed to respond normally. Check the server logs.
   /account/{gameName}/{tagLine}:
     get:
-      summary: Get player account information
+      summary: Get account information
       description: Returns Riot account information for the specified game name and tagline.
       operationId: getAccount
       tags:
@@ -85,7 +89,7 @@ paths:
                 type: string
   /rank/{server}/{puuid}:
     get:
-      summary: Get player's solo queue rank
+      summary: Get soloqueue rank
       description: >
         Returns the player's Ranked Solo/Duo information for the specified
         League of Legends server. If the player is unranked in Solo Queue,
