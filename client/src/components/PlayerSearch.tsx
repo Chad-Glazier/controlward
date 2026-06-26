@@ -3,10 +3,10 @@ import styles from "./PlayerSearch.module.css"
 import { validateRiotAccount } from "../cw/validators"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import userExists from "../cw/userExists";
+import getPuuid from "../cw/getPuuid";
 
 type PlayerSearchProps = {
-    onSearch: (gameName: string, tagLine: string) => Promise<void>
+    onSearch: (puuid: string) => Promise<void>
     className?: string
 }
 
@@ -36,12 +36,12 @@ export default function PlayerSearch({
         setError("")
         
         setLoading(true)
-        let found = await userExists(gameName, tagLine)
-        if (!found) {
+        let puuid = await getPuuid(gameName, tagLine)
+        if (puuid === null) {
             setError("User not found")
             setShowError(true)
         } else {
-            await onSearch(gameName, tagLine)
+            await onSearch(puuid)
         }
         setLoading(false)
     })
@@ -80,7 +80,7 @@ export default function PlayerSearch({
                         if (err !== null) {
                             setError(err)
                         }
-                    }, 200)
+                    }, 400)
                 }}
             >
             </input>

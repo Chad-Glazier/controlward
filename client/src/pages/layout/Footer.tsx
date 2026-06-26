@@ -6,13 +6,13 @@ function Footer() {
     return (
         <footer className={styles.footer}>
             <div className={styles.content}>
-                <small>&#xA9; {year} Control Ward. All rights reserved.</small>
+                <small>&#xA9; {year} Chad Glazier.</small>
                 <small>Not affiliated with Riot Games</small>
                 <div className={styles.contact}>
                     <small>
                         <span>Contact:</span>&nbsp;
-                        <a href="mailto:chadglazier@outlook.com">
-                            chadglazier@outlook.com
+                        <a href="mailto:contact@controlward.com">
+                            contact@controlward.com
                         </a>                        
                     </small>
                 </div>

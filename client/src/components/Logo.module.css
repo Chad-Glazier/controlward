@@ -1,0 +1,36 @@
+.header {
+    border-right: 4px solid rgba(255, 255, 255, 0.5);
+
+	text-wrap: wrap;
+    text-align: right;
+
+	font-family: "Space Grotesk", sans-serif;
+
+	color: rgba(255, 255, 255, 0.7);
+
+	background: linear-gradient(90deg,
+		rgba(0, 0, 0, 0), red, rgba(0, 0, 0, 0));
+	background-repeat: no-repeat;
+	background-size: 60%;
+	animation: wave 6s linear infinite;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes wave {
+	0% {
+		background-position: -300%;
+	}
+	100% {
+		background-position: 300%;
+	}
+}
+
+.header.clickable {
+    transition: background-color 400ms ease;
+}
+
+.header.clickable:hover {
+    background-color: red;
+}

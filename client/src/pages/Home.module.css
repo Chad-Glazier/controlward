@@ -2,46 +2,16 @@
     display: flex;
     flex-direction: row;
     gap: 40px;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+	padding-top: 30vh;
+	padding-bottom: 10vh;
 
     backdrop-filter: contrast(80%);
     background-color: rgba(0, 0, 0, 0.7);
-}
-
-.header {
-    border-right: 4px solid rgba(255, 255, 255, 0.5);
-    padding-right: 2rem;
-
-	text-wrap: wrap;
-    text-align: right;
-
-	font-size: 10rem;
-
-	font-family: "Space Grotesk", sans-serif;
-
-	color: rgba(255, 255, 255, 0.5);
-
-	background: linear-gradient(90deg,
-		rgba(0, 0, 0, 0), red, rgba(0, 0, 0, 0));
-	background-repeat: no-repeat;
-	background-size: 60%;
-	animation: wave 6s linear infinite;
-	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: rgba(255, 255, 255, 0.5);
-}
-
-@keyframes wave {
-	0% {
-		background-position: -300%;
-	}
-	100% {
-		background-position: 300%;
-	}
 }
 
 .searchSection {
@@ -49,11 +19,11 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	padding-top: 100px;
-	width: min(600px, calc(100% - 20px));
+	width: min(600px, calc(100% - 40px));
 	gap: 40px;
 	min-height: 400px;
-	max-height: min(60vh, 600px);
+
+	padding-top: 20px;
 }
 
 .subtitle {
@@ -66,22 +36,41 @@
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	overflow-y: auto;
-	overflow-x: hidden;
 }
 
 .recentSearches h2 {
 	color: gray;
-	font-style: italic;
 	font-weight: normal;
 	font-size: 1rem;
+	text-align: right;
 }
 
+.downButton {
+	font-size: 20px;
+	color: #999;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	transition: 
+		padding-top 400ms ease,
+		padding-bottom 400ms ease,
+		color 400ms ease;
+	background: none;
+	border: none;
+}
 
-@media (orientation: portrait) {
+.downButton:hover {
+	color: #eee;
+	padding-top: 12px;
+	padding-bottom: 0px;
+	cursor: pointer;
+}
+
+@media (max-width: 1200px) {
 	.container {
 		flex-direction: column;
+		align-items: center;
 		gap: 20px;
+		padding-top: 10vh;
 	}
 
 	.searchSection {

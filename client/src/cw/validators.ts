@@ -35,6 +35,18 @@ export function validateRiotAccount(input: string): [
         gameName += input[i]
     }
 
+    if (gameName.length > GAME_NAME_MAX_LENGTH) {
+        return [ 
+            "", "", 
+            `The game name cannot have more than ${GAME_NAME_MAX_LENGTH} characters`,
+        ]
+    }
+    if (gameName.length < GAME_NAME_MIN_LENGTH) {
+        return [
+            "", "",
+            `The game name cannot have fewer than ${GAME_NAME_MIN_LENGTH} characters`,
+        ]
+    }
     if (!foundDelimiter) {
         return [ "", "", "Make sure to include a tag line like \"#NA1\"" ]
     }
@@ -48,18 +60,6 @@ export function validateRiotAccount(input: string): [
         return [
             "", "",
             `The tag line cannot have fewer than ${TAG_LINE_MIN_LENGTH} characters`,
-        ]
-    }
-    if (gameName.length > GAME_NAME_MAX_LENGTH) {
-        return [ 
-            "", "", 
-            `The game name cannot have more than ${GAME_NAME_MAX_LENGTH} characters`,
-        ]
-    }
-    if (gameName.length < GAME_NAME_MIN_LENGTH) {
-        return [
-            "", "",
-            `The game name cannot have fewer than ${GAME_NAME_MIN_LENGTH} characters`,
         ]
     }
 

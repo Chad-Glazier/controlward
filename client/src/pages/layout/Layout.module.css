@@ -14,10 +14,14 @@
     min-height: 100vh;
 }
 
+.main.withHeader {
+    margin-top: var(--header-height);
+}
+
 .scrollup {
     position: fixed;
-    bottom: 50px;
-    right: 50px;
+    bottom: 80px;
+    right: 80px;
 
 
     border-radius: 100%;
@@ -26,9 +30,9 @@
     color: #222;
     font-size: 2rem;
     padding: 12px;
-    
+
     opacity: 1;
-    transition: 
+    transition:
         background-color 400ms ease,
         color 400ms ease,
         opacity 400ms ease;

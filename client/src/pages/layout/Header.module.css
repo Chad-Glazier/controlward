@@ -8,14 +8,16 @@
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 40px;
 
-    height: 72px;
+    height: var(--header-height);
     padding: 0 24px;
 
-    background-color: #111827;
-    border-top: 1px solid #1f2937;
+    background-color: rgba(17, 24, 39, 0.8);
+    border-bottom: 1px solid #1f2937;
     color: #eee;
+    backdrop-filter: blur(12px);
 
     transition: transform 400ms ease;
 }
@@ -24,103 +26,8 @@
     transform: translateY(-100%);
 }
 
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 2.6rem;
-    color: #eee;
-    font-variant: small-caps;
-}
-
-.logo {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-}
-
-.title {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.button {
-    width: 40px;
-    height: 40px;
-
-    border: none;
-    border-radius: 8px;
-
-    background-color: #2563eb;
-    color: white;
-
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.button:hover {
-    background-color: #1d4ed8;
-}
-
-.search {
-    flex: 1;
-    width: min(600px, 70vw);
-    margin: 0 32px;
-
-    display: flex;
-    align-items: center;
-
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 24px;
-    padding: 2px 0px 2px 20px;
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    transition:
-        background-color 400ms ease,
-        border-color 400ms ease;
-}
-
-.searchInput {
-    width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: #222;
-    font-size: 1rem;
-    padding: 0;
-}
-
-.search:has(.searchInput:focus) {
-    border-color: #8dacff;
-    background-color: white;
-}
-
-.searchInput::placeholder {
-    color: #999999;
-}
-
-.searchButton {
-    font-size: 1em;
-    padding: 5px;
-    margin-right: 3px;
-    color: #222;
-    background-color: rgba(0, 0, 0, 0);
-    border-radius: 100%;
-    transition: background-color 300ms ease;
-}
-
-.searchButton:hover {
-    cursor: pointer;
-    background-color: #aaa;
+@media (max-width: 500px) {
+    .header {
+        gap: 10px;
+    }
 }

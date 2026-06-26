@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router"
-import Home from "./pages/Home"
 import { PreferencesProvider } from "./hooks/usePreferences"
+import Home from "./pages/Home"
+import Profile from  "./pages/Profile" 
 
 export default function App() {
     return (
@@ -8,6 +9,7 @@ export default function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/profile/:puuid" element={<Profile />} />
                 </Routes>
             </BrowserRouter> 
         </PreferencesProvider>

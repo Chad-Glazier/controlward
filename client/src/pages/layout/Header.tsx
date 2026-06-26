@@ -1,25 +1,29 @@
 import styles from "./Header.module.css"
-import logo from "../../assets/logo.png"
-import { Link } from "react-router";
+import Logo from "../../components/Logo";
+import PlayerSearch from "../../components/PlayerSearch";
+import { useNavigate } from "react-router";
 
 type HeaderProps = {
     hidden?: boolean
 }
 
 function Header({ hidden }: HeaderProps) {
+    const navigate = useNavigate()
+
     return <header 
         className={styles.header + " " + (hidden ? styles.hidden : "")} 
         id="header"
     >
-        <Link to="/">
-            <div className={styles.brand}>
-                <img className={styles.logo} src={logo} alt="logo" />
-                <h1 className={styles.title}>Control Ward</h1>
-            </div>        
-        </Link>
-        <div className={styles.actions}>
-            <button className={styles.button}>b</button>
-        </div>
+        <Logo 
+            height="40px"
+            clickable
+        />
+        <PlayerSearch 
+            onSearch={async (puuid) => {
+                navigate(`/profile/${puuid}`)
+            }}
+            className={styles.search}
+        />
     </header>
 }
 
