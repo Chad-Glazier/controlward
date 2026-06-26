@@ -25,3 +25,89 @@ paths:
           description: The service is functional.
         "500":
           description: The service failed to respond normally. Check the server logs.
+  /account/{gameName}/{tagLine}:
+    get:
+      summary: Get player account information
+      description: Returns Riot account information for the specified game name and tagline.
+      operationId: getAccount
+      tags:
+        - Accounts
+
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          description: Riot game name.
+          schema:
+            type: string
+
+        - name: tagLine
+          in: path
+          required: true
+          description: Riot tagline.
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Account information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+
+        "400":
+          description: Invalid game name or tagline.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+        "404":
+          description: Account not found.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+        "429":
+          description: Riot API rate limit exceeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+        "500":
+          description: Internal server error.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    Account:
+      type: object
+      required:
+        - gameName
+        - tagLine
+        - puuid
+        - server
+      properties:
+        gameName:
+          type: string
+          example: Hide on bush
+
+        tagLine:
+          type: string
+          example: KR1
+
+        puuid:
+          type: string
+          description: Riot's globally unique player identifier.
+          example: cQh4lD1Q7vK1L3o4...
+
+        server:
+          type: string
+          description: The server/region the account belongs to.
+          example: kr1

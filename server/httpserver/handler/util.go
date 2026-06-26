@@ -65,7 +65,7 @@ func sendCompressedJson(w http.ResponseWriter, r *http.Request, data any) error 
 }
 
 // Sends uncompressed JSON in the response.
-func sendJson(w http.ResponseWriter, r *http.Request, data any) error {
+func sendJson(w http.ResponseWriter, data any) error {
 	w.Header().Add("Content-Type", "application/json")
 
 	encoder := json.NewEncoder(w)

@@ -53,6 +53,7 @@ func Start() {
 	mux.HandleFunc("GET /health", handler.Health(conf))
 
 	mux.HandleFunc("GET /history/{gameName}/{tagLine}", handler.GetHistory(conf))
+	mux.HandleFunc("GET /account/{gameName}/{tagLine}", handler.GetAccount(conf))
 
 	//
 	// Register global middleware.

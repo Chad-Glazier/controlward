@@ -9,10 +9,10 @@ type LayoutProps = PropsWithChildren<{
 
 function Layout({ children, hideHeader }: LayoutProps) {
     return <div className={styles.container}>
-        <Header hidden={hideHeader} />
         <main className={styles.main + " " + (!hideHeader ? styles.withHeader : "")}>
             {children}
         </main>
+        <Header hidden={hideHeader} />
         <Footer />
     </div>
 }

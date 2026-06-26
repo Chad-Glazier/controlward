@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Footer.module.css";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { Link } from "react-router";
 
 function Footer() {
     return (
@@ -26,6 +27,11 @@ function Footer() {
                         Legends. League of Legends and Riot Games are trademarks 
                         or registered trademarks of Riot Games, Inc. League of 
                         Legends &copy; Riot Games, Inc.
+                    </li>
+                    <li>
+                        <Link to="/about">
+                            About Control Ward
+                        </Link>
                     </li>
                 </ul>
                 <div className={styles.contact}>

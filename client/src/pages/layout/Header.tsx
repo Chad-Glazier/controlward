@@ -20,6 +20,7 @@ function Header({ hidden }: HeaderProps) {
         />
         <PlayerSearch 
             onSearch={async (puuid) => {
+                window.scrollTo(0, 0)
                 navigate(`/profile/${puuid}`)
             }}
             className={styles.search}

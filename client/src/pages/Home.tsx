@@ -23,6 +23,7 @@ function Home() {
                 <PlayerSearch 
                     className={styles.searchBar}
                     onSearch={async (a) => {
+                        window.scrollTo(0, 0)
                         navigate(`/profile/${a}`)
                     }}
                 />
