@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    font-family: "Roboto", sans-serif;
+}
+
+:root {
+    scroll-behavior: smooth;
+
+    --header-height: 72px;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+}

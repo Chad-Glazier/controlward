@@ -1,0 +1,33 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+
+    height: var(--header-height);
+    padding: 0 24px;
+
+    background-color: rgba(17, 24, 39, 0.8);
+    border-bottom: 1px solid #1f2937;
+    color: #eee;
+    backdrop-filter: blur(12px);
+
+    transition: transform 400ms ease;
+}
+
+.header.hidden {
+    transform: translateY(-100%);
+}
+
+@media (max-width: 500px) {
+    .header {
+        gap: 10px;
+    }
+}
