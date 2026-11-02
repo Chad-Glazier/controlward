@@ -36,7 +36,7 @@ func ValidateTagLine(tagLine string) error {
 		return errors.New("tagLine cannot have more than 5 runes")
 	}
 	if runeCount < 3 {
-		return errors.New("tagLine cannot have fewer than 4 runes")
+		return errors.New("tagLine cannot have fewer than 3 runes")
 	}
 
 	return nil

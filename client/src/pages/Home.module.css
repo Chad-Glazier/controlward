@@ -11,7 +11,7 @@
 	padding-bottom: 10vh;
 
     backdrop-filter: contrast(80%);
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .searchSection {
@@ -28,7 +28,7 @@
 
 .subtitle {
 	display: none;
-    color: #aaa;
+    color: #eee;
 }
 
 .recentSearches {
@@ -39,7 +39,7 @@
 }
 
 .recentSearches h2 {
-	color: gray;
+	color: #eee;
 	font-weight: normal;
 	font-size: 1rem;
 	text-align: right;

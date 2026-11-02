@@ -1,5 +1,5 @@
 .header {
-    border-right: 4px solid rgba(255, 255, 255, 0.5);
+    border-right: 4px solid rgba(255, 255, 255, 0.7);
 
 	text-wrap: wrap;
     text-align: right;
@@ -15,7 +15,7 @@
 	animation: wave 6s linear infinite;
 	background-clip: text;
 	-webkit-background-clip: text;
-	-webkit-text-fill-color: rgba(255, 255, 255, 0.5);
+	-webkit-text-fill-color: rgba(255, 255, 255, 0.7);
 }
 
 @keyframes wave {
