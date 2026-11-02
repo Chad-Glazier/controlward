@@ -8,6 +8,9 @@
 async function getPuuid(
     gameName: string, tagLine: string
 ): Promise<string | null> {
+
+    console.log(`requesting ${gameName}#${tagLine}`)
+
     await new Promise(resolve => setTimeout(resolve, 1000));
     if (Math.random() > 0.5) {
         return "SAMPLE_PUUID"

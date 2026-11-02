@@ -6,6 +6,9 @@ function Profile() {
     const { puuid } = useParams()
 
     return <Layout>
+        <div className={styles.placeholder}>
+
+        </div>
         {puuid}
     </Layout>
 }
